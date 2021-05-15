@@ -4,32 +4,35 @@ import mcpi.block as block
 import datetime
 
 
-startPosY = 100
+startPosX =  1079
+startPosY = 66 
+startPosZ = 1281
 
-ballPosX = 0
+ballPosX = startPosX
 ballPosY = startPosY + 1
-ballPosZ = 0
+ballPosZ = startPosZ
 
 yelloScore = 0
 blueScore = 0
 preTime = 0
 
 def buildField():
-    mc.setBlocks(-29,startPosY,-19,29,15,19,block.AIR.id)
+    mc.setBlocks(startPosX-29,startPosY,startPosZ -19,startPosX+29,15,19,block.AIR.id)
 
-    mc.setBlocks(-29,startPosY,-19,29,startPosY,19,block.WOOL.id,0)
-    mc.setBlocks(-28,startPosY,-18,28,startPosY,18,block.WOOL.id,13)
-    mc.setBlocks(ballPosX,startPosY,-19,ballPosX,0,19,block.WOOL.id,0)
-    mc.setBlocks(-29,startPosY,-8,-18,startPosY,8,block.WOOL.id,0)
-    mc.setBlocks(29,startPosY,-8,18,startPosY,8,block.WOOL.id,0)
-    mc.setBlocks(-28,startPosY,-7,-19,startPosY,7,block.WOOL.id,13)
-    mc.setBlocks(28,startPosY,-7,19,startPosY,7,block.WOOL.id,13)
+    mc.setBlocks(startPosX-29,startPosY,startPosZ-19,startPosX+29,startPosY,19,block.WOOL.id,0)
+    mc.setBlocks(startPosX-28,startPosY,startPosZ-18,startPosX+28,startPosY,18,block.WOOL.id,13)
+    mc.setBlocks(ballPosX,startPosY,startPosZ-19,ballPosX,startPosX+0,19,block.WOOL.id,0)
+    mc.setBlocks(startPosX-29,startPosY,startPosZ-8,startPosX-18,startPosY,8,block.WOOL.id,0)
+    mc.setBlocks(startPosX+29,startPosY,startPosZ-8,startPosX+18,startPosY,8,block.WOOL.id,0)
 
-    mc.setBlocks(29,startPosY+3,-5,29,startPosY+3,5,block.WOOL.id,4)
-    mc.setBlocks(-29,startPosY+3,-5,-29,startPosY+3,5,block.WOOL.id,11)
+    mc.setBlocks(startPosX-28,startPosY,startPosZ-7,startPosX-19,startPosY,7,block.WOOL.id,13)
+    mc.setBlocks(startPosX+28,startPosY,startPosZ-7,startPosX+19,startPosY,7,block.WOOL.id,13)
 
-    showYelloScore(29,startPosY+5,-1,yelloScore)
-    showBlueScore(-29,startPosY+5,1,blueScore)
+    mc.setBlocks(startPosX+29,startPosY+3,startPosZ-5,29,startPosY+3,5,block.WOOL.id,4)
+    mc.setBlocks(startPosX-29,startPosY+3,startPosZ-5,-29,startPosY+3,5,block.WOOL.id,11)
+
+    showYelloScore(startPosX+29,startPosY+5,startPosZ-1,yelloScore)
+    showBlueScore(startPosX-29,startPosY+5,startPosZ+1,blueScore)
 
 def showYelloScore(baseX,baseY,baseZ,num):
    if num >= 0 and num <= 9:
@@ -78,6 +81,8 @@ def showNum(baseX,baseY,baseZ,num):
        for line in f.readlines():
             data = line.split(",")
             for cell in data:
+                if cell == "1":
+                    mc.s
                 offsetX = offsetX + 1
                 offsetY = offsetY - 1
                 offsetX = 0
@@ -125,19 +130,20 @@ while True:
                 mc.setBlock(e.pos.x,e.pos.y,e.pos.z+1,block.WOOL.id,1)
                 ballPosZ = ballPosZ + 1
         if ballPosX <-29 or ballPosX >29 or ballPosZ < -19 or ballPosZ > 19:
-            mc.setBlock(ballPosX,ballPosY,ballPosZ,block.TNT.id,1)
             if ballPosZ >= -5 and ballPosZ <= 5:
                 mc.postToChat('GOAL')
-            if ballPosX <-29:
-                yelloScore = yelloScore + 1
-            if ballPosX > 29:
-                blueScore = blueScore + 1
+                if ballPosX <-29:
+                    yelloScore = yelloScore + 1
+                if ballPosX > 29:
+                    blueScore = blueScore + 1
                 
-            mc.postToChat('YELLO:'+ str(yelloScore) + '   BLUE:' +str(blueScore))
-            
-        else:
-            mc.postToChat('OUT')
+                mc.postToChat('YELLO:'+ str(yelloScore) + '   BLUE:' +str(blueScore))
+            else:
+                mc.setBlock(ballPosX,ballPosY,ballPosZ,block.TNT.id,1)
+                mc.postToChat('OUT')
+
         ballPosX = yelloScore - blueScore
+
         if ballPosX > 15:
             ballPosX = 15
         if ballPosX < -15:
